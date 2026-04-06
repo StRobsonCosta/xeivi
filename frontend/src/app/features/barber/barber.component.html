@@ -1,0 +1,46 @@
+<section class="page-section">
+  <h2>Agenda do Barbeiro</h2>
+
+  <div class="panel form-panel">
+    <div class="field-row">
+      <div class="field">
+        <label>Data da agenda</label>
+        <input type="date" [(ngModel)]="date" (change)="loadSchedule()" />
+      </div>
+      <div class="field">
+        <label>Projeção até</label>
+        <input type="date" [(ngModel)]="endDate" />
+      </div>
+      <div class="field button-field">
+        <button (click)="loadEarnings()">Carregar ganhos</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h3>Horários</h3>
+      <ul>
+        <li *ngFor="let appointment of schedule">
+          <strong>{{ appointment.serviceName }}</strong>
+          <span>{{ appointment.scheduledAt | date:'short' }}</span>
+          <span>R$ {{ appointment.barberShare.toFixed(2) }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h3>Ganhos</h3>
+      <p class="metric">R$ {{ earnings.toFixed(2) }}</p>
+      <h4>Projeção</h4>
+      <ul>
+        <li *ngFor="let item of projection | keyvalue">
+          <span>{{ item.key }}</span>
+          <strong>R$ {{ item.value.toFixed(2) }}</strong>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+</section>

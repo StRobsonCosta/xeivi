@@ -1,0 +1,19 @@
+<div class="app-shell">
+  <header>
+    <div class="brand">Barbearia Kavex</div>
+    <nav *ngIf="auth.isLoggedIn()">
+      <a routerLink="/cliente" *ngIf="auth.isClient()">Agendamento</a>
+      <a routerLink="/barbeiro" *ngIf="auth.isBarber()">Agenda</a>
+      <a routerLink="/dono" *ngIf="auth.isOwner()">Dashboard</a>
+      <button class="action" (click)="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer>
+    <span>Front-end leve em Angular com foco em segurança e compatibilidade.</span>
+  </footer>
+</div>

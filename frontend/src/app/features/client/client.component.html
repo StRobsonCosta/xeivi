@@ -1,0 +1,58 @@
+<section class="page-section">
+  <h2>Agende seu horário</h2>
+
+  <div class="grid">
+    <div class="panel">
+      <h3>Serviços</h3>
+      <ul>
+        <li *ngFor="let service of services">
+          <strong>{{ service.name }}</strong>
+          <span>{{ service.description }}</span>
+          <strong>R$ {{ service.price.toFixed(2) }}</strong>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h3>Produtos</h3>
+      <ul>
+        <li *ngFor="let product of products">
+          <strong>{{ product.name }}</strong>
+          <span>{{ product.description }}</span>
+          <strong>R$ {{ product.price.toFixed(2) }}</strong>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel form-panel">
+    <h3>Agendar horário</h3>
+    <div class="field">
+      <label>Serviço</label>
+      <select [(ngModel)]="request.serviceOfferId" name="serviceOfferId">
+        <option value="0">Escolha um serviço</option>
+        <option *ngFor="let service of services" [value]="service.id">{{ service.name }} - R$ {{ service.price.toFixed(2) }}</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Data e hora</label>
+      <input type="datetime-local" [(ngModel)]="request.scheduledAt" name="scheduledAt" />
+    </div>
+
+    <div class="field">
+      <label>Comissão do dono (%)</label>
+      <input type="number" [(ngModel)]="request.ownerSharePercentage" name="ownerSharePercentage" min="0" max="100" />
+    </div>
+
+    <button (click)="submit()">Agendar</button>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+    <section *ngIf="scheduleResponse" class="success">
+      <h4>Agendamento confirmado!</h4>
+      <p>{{ scheduleResponse.serviceName }} em {{ scheduleResponse.scheduledAt | date:'short' }}</p>
+      <p>Valor total: R$ {{ scheduleResponse.totalPrice.toFixed(2) }}</p>
+      <p>Receita do barbeiro: R$ {{ scheduleResponse.barberShare.toFixed(2) }}</p>
+    </section>
+  </div>
+</section>

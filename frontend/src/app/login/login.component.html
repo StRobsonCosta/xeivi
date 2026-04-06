@@ -1,0 +1,30 @@
+<section class="login-card">
+  <h1>Entrar na Barbearia</h1>
+
+  <div class="field">
+    <label for="username">Usuário</label>
+    <input id="username" [(ngModel)]="username" name="username" autocomplete="username" />
+  </div>
+
+  <div class="field">
+    <label for="password">Senha</label>
+    <input id="password" type="password" [(ngModel)]="password" name="password" autocomplete="current-password" />
+  </div>
+
+  <div class="field">
+    <label for="role">Perfil</label>
+    <select id="role" [(ngModel)]="role" name="role">
+      <option value="CLIENTE">Cliente</option>
+      <option value="BARBEIRO">Barbeiro</option>
+      <option value="DONO">Dono</option>
+    </select>
+  </div>
+
+  <button (click)="login()">Entrar</button>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <p class="hint">
+    Use as credenciais definidas no backend. O aplicativo envia credenciais apenas quando necessário.
+  </p>
+</section>

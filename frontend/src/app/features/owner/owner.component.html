@@ -1,0 +1,70 @@
+<section class="page-section">
+  <h2>Visão do Dono</h2>
+
+  <div class="panel form-panel">
+    <div class="field-row">
+      <div class="field">
+        <label>De</label>
+        <input type="date" [(ngModel)]="from" />
+      </div>
+      <div class="field">
+        <label>Até</label>
+        <input type="date" [(ngModel)]="to" />
+      </div>
+      <div class="field button-field">
+        <button (click)="loadDashboard()">Atualizar</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="dashboard; else loading">
+    <div class="grid metrics">
+      <div class="panel metric-card">
+        <span>Clientes</span>
+        <strong>{{ dashboard.totalCustomers }}</strong>
+      </div>
+      <div class="panel metric-card">
+        <span>Receita Bruta</span>
+        <strong>R$ {{ dashboard.grossRevenue.toFixed(2) }}</strong>
+      </div>
+      <div class="panel metric-card">
+        <span>Lucro</span>
+        <strong>R$ {{ dashboard.ownerProfit.toFixed(2) }}</strong>
+      </div>
+      <div class="panel metric-card">
+        <span>Custos</span>
+        <strong>R$ {{ dashboard.totalCosts.toFixed(2) }}</strong>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h3>Dias mais movimentados</h3>
+        <ul>
+          <li *ngFor="let day of dashboard.busiestDays">
+            <span>{{ day.date }}</span>
+            <strong>{{ day.appointments }} agendamentos</strong>
+            <span>R$ {{ day.revenue.toFixed(2) }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h3>Dias mais lentos</h3>
+        <ul>
+          <li *ngFor="let day of dashboard.slowestDays">
+            <span>{{ day.date }}</span>
+            <strong>{{ day.appointments }} agendamentos</strong>
+            <span>R$ {{ day.revenue.toFixed(2) }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <p>Carregando dados do dono...</p>
+  </ng-template>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+</section>
