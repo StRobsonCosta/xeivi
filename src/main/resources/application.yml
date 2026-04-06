@@ -1,13 +1,14 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:barbearia;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5432/barbearia
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: 1234
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 management:
   endpoints:
     web:
@@ -18,4 +19,4 @@ management:
       prometheus:
         enabled: true
 server:
-  port: 8081
+  port: 8088
