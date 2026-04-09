@@ -35,3 +35,4 @@ mvn spring-boot:run
 ## Segurança
 
 Usuários definidos no código apenas para exemplo. Em produção, troque por um provedor de identidade.
+---
