@@ -23,7 +23,7 @@ Projeto Java Spring Boot para gest√£o de barbearia com arquitetura DDD, seguran√
 cd barbearia
 mvn spring-boot:run
 ```
----
+----
 ## API
 
 - `GET /api/clients/services`
