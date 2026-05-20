@@ -1,11 +1,21 @@
 package com.barbearia.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "appointments")
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Appointment {
 
     @Id
@@ -22,9 +32,6 @@ public class Appointment {
     private boolean paid;
     private double ownerSharePercentage;
 
-    protected Appointment() {
-    }
-
     public Appointment(Customer customer, ServiceOffer serviceOffer, LocalDateTime scheduledAt, double ownerSharePercentage) {
         this.customer = Objects.requireNonNull(customer, "customer is required");
         this.serviceOffer = Objects.requireNonNull(serviceOffer, "serviceOffer is required");
@@ -32,32 +39,8 @@ public class Appointment {
         this.ownerSharePercentage = ownerSharePercentage;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public ServiceOffer getServiceOffer() {
-        return serviceOffer;
-    }
-
-    public LocalDateTime getScheduledAt() {
-        return scheduledAt;
-    }
-
-    public boolean isPaid() {
-        return paid;
-    }
-
     public void markPaid() {
         this.paid = true;
-    }
-
-    public double getOwnerSharePercentage() {
-        return ownerSharePercentage;
     }
 
     public double getBarberRevenue() {

@@ -60,6 +60,18 @@
         </ul>
       </div>
     </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h3>Usuários</h3>
+        <ul>
+          <li *ngFor="let u of users">
+            <span>{{ u.username || u.name || u.email }}</span>
+            <strong>{{ u.role || u.authorities || '' }}</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <ng-template #loading>

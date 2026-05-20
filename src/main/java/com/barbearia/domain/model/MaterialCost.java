@@ -5,11 +5,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table(name = "material_costs")
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class MaterialCost {
 
     @Id
@@ -19,28 +29,9 @@ public class MaterialCost {
     private double amount;
     private LocalDate costDate;
 
-    protected MaterialCost() {
-    }
-
     public MaterialCost(String description, double amount, LocalDate costDate) {
         this.description = Objects.requireNonNull(description, "description is required");
         this.amount = amount;
         this.costDate = Objects.requireNonNull(costDate, "costDate is required");
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public LocalDate getCostDate() {
-        return costDate;
     }
 }
