@@ -13,6 +13,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import com.barbearia.security.JwtFilter;
+import com.barbearia.security.JwtUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +25,10 @@ import java.util.List;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
+        private final JwtUtil jwtUtil;
+
+        public SecurityConfig(JwtUtil jwtUtil) { this.jwtUtil = jwtUtil; }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -61,16 +69,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(Customizer.withDefaults())
+        JwtFilter jwtFilter = new JwtFilter(jwtUtil);
+
+        http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
                         .requestMatchers("/api/owners/**").hasRole("DONO")
                         .requestMatchers("/api/barbers/**").hasRole("BARBEIRO")
                         .requestMatchers("/api/clients/**").hasRole("CLIENTE")
                         .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // keep httpBasic for non-jwt flows (in-memory users)
+        http.httpBasic(Customizer.withDefaults());
+
         return http.build();
     }
 }

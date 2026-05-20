@@ -1,0 +1,7 @@
+<section class="page-section">
+  <h2>Redefinir senha</h2>
+  <div class="field"><label>Token</label><input [(ngModel)]="token" /></div>
+  <div class="field"><label>Nova senha</label><input type="password" [(ngModel)]="newPassword" /></div>
+  <button (click)="reset()">Redefinir</button>
+  <p class="error" *ngIf="error">{{ error }}</p>
+</section>
