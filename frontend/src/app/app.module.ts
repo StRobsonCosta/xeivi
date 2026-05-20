@@ -6,11 +6,12 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 import { SecurityGuard } from './core/security.guard';
 import { CoreModule } from './core/core.module';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, RegisterComponent],
   imports: [BrowserModule, HttpClientModule, FormsModule, ReactiveFormsModule, RouterModule, AppRoutingModule, CoreModule],
   providers: [SecurityGuard],
   bootstrap: [AppComponent]

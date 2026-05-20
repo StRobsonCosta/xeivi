@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 import { SecurityGuard } from './core/security.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'cliente', loadChildren: () => import('./features/client/client.module').then(m => m.ClientModule), canActivate: [SecurityGuard] },
   { path: 'barbeiro', loadChildren: () => import('./features/barber/barber.module').then(m => m.BarberModule), canActivate: [SecurityGuard] },
   { path: 'dono', loadChildren: () => import('./features/owner/owner.module').then(m => m.OwnerModule), canActivate: [SecurityGuard] },
