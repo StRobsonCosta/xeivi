@@ -11,9 +11,10 @@ public class AppointmentResponse {
     private double totalPrice;
     private double ownerShare;
     private double barberShare;
+    private String status;
 
     public AppointmentResponse(Long appointmentId, Long customerId, String serviceName, LocalDateTime scheduledAt,
-                               double totalPrice, double ownerShare, double barberShare) {
+                               double totalPrice, double ownerShare, double barberShare, String status) {
         this.appointmentId = appointmentId;
         this.customerId = customerId;
         this.serviceName = serviceName;
@@ -21,6 +22,7 @@ public class AppointmentResponse {
         this.totalPrice = totalPrice;
         this.ownerShare = ownerShare;
         this.barberShare = barberShare;
+        this.status = status;
     }
 
     public Long getAppointmentId() {
@@ -50,4 +52,6 @@ public class AppointmentResponse {
     public double getBarberShare() {
         return barberShare;
     }
+
+    public String getStatus() { return status; }
 }

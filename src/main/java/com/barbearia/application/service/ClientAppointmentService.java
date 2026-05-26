@@ -79,6 +79,7 @@ public class ClientAppointmentService {
                 saved.getScheduledAt(),
                 serviceOffer.getPrice(),
                 saved.getOwnerRevenue(),
-                saved.getBarberRevenue());
+                saved.getBarberRevenue(),
+                saved.getStatus().name());
     }
 }

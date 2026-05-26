@@ -18,6 +18,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Appointment {
 
+    public enum Status { SCHEDULED, CONFIRMED, CANCELLED, COMPLETED }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,16 +34,24 @@ public class Appointment {
     private boolean paid;
     private double ownerSharePercentage;
 
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.SCHEDULED;
+
     public Appointment(Customer customer, ServiceOffer serviceOffer, LocalDateTime scheduledAt, double ownerSharePercentage) {
         this.customer = Objects.requireNonNull(customer, "customer is required");
         this.serviceOffer = Objects.requireNonNull(serviceOffer, "serviceOffer is required");
         this.scheduledAt = Objects.requireNonNull(scheduledAt, "scheduledAt is required");
         this.ownerSharePercentage = ownerSharePercentage;
+        this.status = Status.SCHEDULED;
     }
 
     public void markPaid() {
         this.paid = true;
     }
+
+    public void confirm() { this.status = Status.CONFIRMED; }
+
+    public void cancel() { this.status = Status.CANCELLED; }
 
     public double getBarberRevenue() {
         return serviceOffer.getPrice() * (1.0 - ownerSharePercentage / 100.0);
