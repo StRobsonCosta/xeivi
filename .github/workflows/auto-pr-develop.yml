@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run CI (maven)
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -47,13 +47,12 @@ jobs:
             const repo = context.repo.repo;
             const base = 'develop';
             // check existing PRs
-            const { data: prs } = await github.pulls.list({ owner, repo, head: owner + ':' + head, base });
+            const { data: prs } = await github.rest.pulls.list({ owner, repo, head: owner + ':' + head, base });
             if (prs.length > 0) {
               console.log('PR already exists to develop:', prs[0].html_url);
             } else {
               const title = `Auto PR: ${head} -> develop`;
               const body = `This PR was created automatically after successful CI for branch ${head}.`;
-              const { data: pr } = await github.pulls.create({ owner, repo, head, base, title, body });
+              const { data: pr } = await github.rest.pulls.create({ owner, repo, head, base, title, body });
               console.log('Created PR:', pr.html_url);
             }
-
