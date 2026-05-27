@@ -1,0 +1,33 @@
+name: Enforce PR target rules
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  enforce-targets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR source/target
+        run: |
+          set -e
+          BASE="${{ github.event.pull_request.base.ref }}"
+          HEAD="${{ github.event.pull_request.head.ref }}"
+          echo "PR from $HEAD to $BASE"
+          if [ "$BASE" = "main" ]; then
+            if [ "$HEAD" != "homol" ]; then
+              echo "ERROR: Only 'homol' branch may be merged into 'main'." >&2
+              exit 1
+            fi
+          fi
+          if [ "$BASE" = "homol" ]; then
+            if [ "$HEAD" != "develop" ]; then
+              echo "ERROR: Only 'develop' branch may be merged into 'homol'." >&2
+              exit 1
+            fi
+          fi
+          echo "PR target rules passed."
+
