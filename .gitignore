@@ -1,0 +1,8 @@
+# IntelliJ project files
+.idea/
+
+# Maven build output
+/target/
+
+# OS generated files
+.DS_Store

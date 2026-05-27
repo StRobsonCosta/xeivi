@@ -9,6 +9,7 @@ import { OwnerDashboard } from '../../shared/models';
 })
 export class OwnerComponent implements OnInit {
   dashboard: OwnerDashboard | null = null;
+  users: any[] = [];
   from = new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().slice(0, 10);
   to = new Date().toISOString().slice(0, 10);
   error = '';
@@ -17,6 +18,7 @@ export class OwnerComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboard();
+    this.loadUsers();
   }
 
   loadDashboard(): void {
@@ -26,5 +28,12 @@ export class OwnerComponent implements OnInit {
         next: data => (this.dashboard = data),
         error: () => (this.error = 'Falha ao carregar dashboard.')
       });
+  }
+
+  loadUsers(): void {
+    this.api.get<any[]>('/api/users').subscribe({
+      next: data => (this.users = data || []),
+      error: () => (this.error = 'Falha ao carregar usuários.')
+    });
   }
 }

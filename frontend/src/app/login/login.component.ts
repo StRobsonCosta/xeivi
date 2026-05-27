@@ -15,15 +15,19 @@ export class LoginComponent {
 
   constructor(private auth: AuthService, private router: Router) {}
 
-  login(): void {
+  async login(): Promise<void> {
     if (!this.username || !this.password) {
       this.error = 'Preencha usuário e senha.';
       return;
     }
 
-    this.auth.login(this.username, this.password, this.role);
-    this.error = '';
+    const ok = await this.auth.login(this.username, this.password, this.role);
+    if (!ok) {
+      this.error = 'Credenciais inválidas. Verifique usuário e senha.';
+      return;
+    }
 
+    this.error = '';
     if (this.role === 'CLIENTE') {
       this.router.navigate(['/cliente']);
     } else if (this.role === 'BARBEIRO') {

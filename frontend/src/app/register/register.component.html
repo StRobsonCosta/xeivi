@@ -1,0 +1,15 @@
+<section class="page-section">
+  <h2>Cadastro de usuário</h2>
+  <div class="field"><label>Usuário</label><input [(ngModel)]="username" /></div>
+  <div class="field"><label>Email</label><input [(ngModel)]="email" /></div>
+  <div class="field"><label>Senha</label><input type="password" [(ngModel)]="password" /></div>
+  <div class="field"><label>Perfil</label>
+    <select [(ngModel)]="role">
+      <option value="CLIENTE">Cliente</option>
+      <option value="BARBEIRO">Barbeiro</option>
+      <option value="DONO">Dono</option>
+    </select>
+  </div>
+  <button (click)="register()">Cadastrar</button>
+  <p class="error" *ngIf="error">{{ error }}</p>
+</section>

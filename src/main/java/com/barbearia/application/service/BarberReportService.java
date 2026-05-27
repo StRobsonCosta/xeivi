@@ -56,6 +56,7 @@ public class BarberReportService {
                 appointment.getScheduledAt(),
                 appointment.getServiceOffer().getPrice(),
                 appointment.getOwnerRevenue(),
-                appointment.getBarberRevenue());
+                appointment.getBarberRevenue(),
+                appointment.getStatus().name());
     }
 }
