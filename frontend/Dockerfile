@@ -1,0 +1,12 @@
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . ./
+RUN npm run build -- --configuration production
+
+FROM nginx:1.25-alpine
+COPY --from=build /app/dist/barbearia-frontend /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
