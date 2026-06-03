@@ -9,6 +9,8 @@ spring:
       ddl-auto: update
     show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: false
 management:
   endpoints:
     web:
