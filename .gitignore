@@ -6,3 +6,8 @@
 
 # OS generated files
 .DS_Store
+
+# Angular cache (build / webpack cache)
+# Ignore Angular's local cache directory to avoid committing machine-specific artifacts
+.angular/
+frontend/.angular/
