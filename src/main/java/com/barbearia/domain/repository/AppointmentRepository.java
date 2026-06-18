@@ -11,4 +11,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findByScheduledAtBetweenOrderByScheduledAtAsc(LocalDateTime start, LocalDateTime end);
     List<Appointment> findByBarberIdAndScheduledAtBetweenOrderByScheduledAtAsc(Long barberId, LocalDateTime start, LocalDateTime end);
     List<Appointment> findByBarberIdAndScheduledAtBetween(Long barberId, LocalDateTime start, LocalDateTime end);
+    java.util.Optional<Appointment> findByBarberIdAndScheduledAt(Long barberId, LocalDateTime scheduledAt);
 }
