@@ -13,6 +13,16 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
+    // do not attach auth header to authentication endpoints
+    try {
+      const url = req.url || '';
+      if (url.includes('/api/auth/')) {
+        return next.handle(req);
+      }
+    } catch (e) {
+      // fall through
+    }
+
     const token = this.auth.getToken();
     if (!token) return next.handle(req);
 
