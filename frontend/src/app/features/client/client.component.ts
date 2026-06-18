@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../core/api.service';
 import { AppointmentRequest, AppointmentResponse, Product, ServiceOffer } from '../../shared/models';
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-client',
@@ -11,7 +12,7 @@ export class ClientComponent implements OnInit {
   services: ServiceOffer[] = [];
   products: Product[] = [];
   request: AppointmentRequest = {
-    customerId: 1,
+    customerId: 0,
     serviceOfferId: 0,
     scheduledAt: new Date().toISOString().slice(0, 16),
     ownerSharePercentage: 25
@@ -19,9 +20,15 @@ export class ClientComponent implements OnInit {
   scheduleResponse: AppointmentResponse | null = null;
   error = '';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private auth: AuthService) {}
 
   ngOnInit(): void {
+    // populate customerId from logged user if available
+    const storedCustomer = localStorage.getItem('auth.customerId');
+    if (storedCustomer) {
+      this.request.customerId = Number(storedCustomer);
+    }
+
     this.api.get<ServiceOffer[]>('/api/clients/services').subscribe({
       next: values => (this.services = values),
       error: () => (this.error = 'Não foi possível carregar os serviços.')

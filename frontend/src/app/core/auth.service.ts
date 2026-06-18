@@ -8,11 +8,14 @@ export type Role = 'CLIENTE' | 'BARBEIRO' | 'DONO';
 export interface AuthUser {
   username: string;
   role: Role;
+  customerId?: number;
 }
 
 interface LoginResponse {
   token: string;
   role: string;
+  username?: string;
+  customerId?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -36,8 +39,12 @@ export class AuthService {
       // Trust server-provided role only (prevent client spoofing)
       localStorage.setItem('auth.token', res.token);
       localStorage.setItem('auth.role', res.role);
-      localStorage.setItem('auth.username', username);
-      this.userSubject.next({ username, role: res.role as Role });
+      const serverUsername = res.username || username;
+      localStorage.setItem('auth.username', serverUsername);
+      if (res.customerId !== undefined && res.customerId !== null) {
+        localStorage.setItem('auth.customerId', String(res.customerId));
+      }
+      this.userSubject.next({ username: serverUsername, role: res.role as Role, customerId: res.customerId });
       return true;
     } catch (e) {
       return false;
@@ -48,6 +55,7 @@ export class AuthService {
     localStorage.removeItem('auth.token');
     localStorage.removeItem('auth.role');
     localStorage.removeItem('auth.username');
+    localStorage.removeItem('auth.customerId');
     this.userSubject.next(null);
   }
 

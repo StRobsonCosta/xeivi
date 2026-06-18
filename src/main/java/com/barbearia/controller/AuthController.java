@@ -60,8 +60,8 @@ public class AuthController {
             return ResponseEntity.status(401).build();
         }
         String token = jwtUtil.generateToken(u.getUsername(), u.getRole());
-        System.out.println("Login successful for user='" + req.getUsername() + "', role='" + u.getRole() + "'");
-        return ResponseEntity.ok(new AuthResponse(token, u.getRole()));
+        System.out.println("Login successful for user='" + req.getUsername() + "', role='" + u.getRole() + "', customerId='" + u.getCustomerId() + "'");
+        return ResponseEntity.ok(new AuthResponse(token, u.getRole(), u.getUsername(), u.getCustomerId()));
     }
 
     @PostMapping("/request-reset")
