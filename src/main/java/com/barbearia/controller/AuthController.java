@@ -43,9 +43,15 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest req) {
         System.out.println("Login attempt for username='" + req.getUsername() + "'");
+        // Try to find by username first, then by email to allow login using either
         Optional<User> uopt = userService.findByUsername(req.getUsername());
+        boolean lookedUpByEmail = false;
         if (uopt.isEmpty()) {
-            System.out.println("Login failed: user not found: '" + req.getUsername() + "'");
+            uopt = userService.findByEmail(req.getUsername());
+            lookedUpByEmail = true;
+        }
+        if (uopt.isEmpty()) {
+            System.out.println("Login failed: user not found (lookup='" + (lookedUpByEmail ? "email" : "username") + "'): '" + req.getUsername() + "'");
             return ResponseEntity.status(401).build();
         }
         User u = uopt.get();
