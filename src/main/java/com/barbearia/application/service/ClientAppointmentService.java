@@ -12,6 +12,8 @@ import com.barbearia.domain.repository.AppointmentRepository;
 import com.barbearia.domain.repository.CustomerRepository;
 import com.barbearia.domain.repository.ProductRepository;
 import com.barbearia.domain.repository.ServiceOfferRepository;
+import com.barbearia.model.User;
+import com.barbearia.repo.UserRepository;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +32,20 @@ public class ClientAppointmentService {
     private final ServiceOfferRepository serviceOfferRepository;
     private final ProductRepository productRepository;
     private final AppointmentRepository appointmentRepository;
+    private final UserRepository userRepository;
     private final MeterRegistry meterRegistry;
 
     public ClientAppointmentService(CustomerRepository customerRepository,
                                     ServiceOfferRepository serviceOfferRepository,
                                     ProductRepository productRepository,
                                     AppointmentRepository appointmentRepository,
+                                    UserRepository userRepository,
                                     MeterRegistry meterRegistry) {
         this.customerRepository = customerRepository;
         this.serviceOfferRepository = serviceOfferRepository;
         this.productRepository = productRepository;
         this.appointmentRepository = appointmentRepository;
+        this.userRepository = userRepository;
         this.meterRegistry = meterRegistry;
     }
 
@@ -63,7 +68,18 @@ public class ClientAppointmentService {
         ServiceOffer serviceOffer = serviceOfferRepository.findById(request.getServiceOfferId())
                 .orElseThrow(() -> new IllegalArgumentException("Serviço não encontrado"));
 
-        Appointment appointment = new Appointment(customer, serviceOffer, request.getScheduledAt(), request.getOwnerSharePercentage());
+        User barber = null;
+        if (request.getBarberId() != null) {
+            barber = userRepository.findById(request.getBarberId()).orElseThrow(() -> new IllegalArgumentException("Barbeiro não encontrado"));
+            if (!"BARBEIRO".equalsIgnoreCase(barber.getRole())) {
+                throw new IllegalArgumentException("Usuário selecionado não é barbeiro");
+            }
+
+            // check availability
+            var start = request.getScheduledAt().toLocalDate().atStartOfDay();
+        }
+
+        Appointment appointment = new Appointment(customer, serviceOffer, barber, request.getScheduledAt(), request.getOwnerSharePercentage());
         appointment.markPaid();
         Appointment saved = appointmentRepository.save(appointment);
 
@@ -72,7 +88,7 @@ public class ClientAppointmentService {
 
         logger.info("Agendamento criado: cliente={}, serviço={}, horário={}", customer.getName(), serviceOffer.getName(), request.getScheduledAt());
 
-        return new AppointmentResponse(
+        AppointmentResponse response = new AppointmentResponse(
                 saved.getId(),
                 customer.getId(),
                 serviceOffer.getName(),
@@ -80,6 +96,30 @@ public class ClientAppointmentService {
                 serviceOffer.getPrice(),
                 saved.getOwnerRevenue(),
                 saved.getBarberRevenue(),
-                saved.getStatus().name());
+                saved.getStatus().name()
+        );
+        if (saved.getBarber() != null) {
+            response.setBarberId(saved.getBarber().getId());
+            response.setBarberName(saved.getBarber().getUsername());
+        }
+
+        return response;
+    }
+
+    public java.util.List<java.time.LocalDateTime> getAvailability(Long barberId, java.time.LocalDate date) {
+        java.time.LocalDateTime start = date.atTime(8,0);
+        java.time.LocalDateTime end = date.atTime(19,0);
+        var appointments = appointmentRepository.findByBarberIdAndScheduledAtBetweenOrderByScheduledAtAsc(barberId, start, end);
+        java.util.Set<java.time.LocalDateTime> occupied = new java.util.HashSet<>();
+        for (var a: appointments) {
+            occupied.add(a.getScheduledAt());
+        }
+        java.util.List<java.time.LocalDateTime> slots = new java.util.ArrayList<>();
+        java.time.LocalDateTime cur = start;
+        while (!cur.isAfter(end.minusMinutes(30))) {
+            if (!occupied.contains(cur)) slots.add(cur);
+            cur = cur.plusMinutes(30);
+        }
+        return slots;
     }
 }

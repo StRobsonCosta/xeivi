@@ -36,8 +36,23 @@
     </div>
 
     <div class="field">
+      <label>Barbeiro</label>
+      <select [(ngModel)]="request.barberId" name="barberId" (change)="onBarberOrDateChange()">
+        <option [ngValue]="undefined">Qualquer</option>
+        <option *ngFor="let b of barbers" [ngValue]="b.id">{{ b.username }}</option>
+      </select>
+    </div>
+
+    <div class="field">
       <label>Data e hora</label>
-      <input type="datetime-local" [(ngModel)]="request.scheduledAt" name="scheduledAt" />
+      <input type="datetime-local" [(ngModel)]="request.scheduledAt" name="scheduledAt" (change)="onBarberOrDateChange()" />
+    </div>
+
+    <div class="field" *ngIf="availableSlots && availableSlots.length>0">
+      <label>Horários disponíveis</label>
+      <ul>
+        <li *ngFor="let s of availableSlots"><button (click)="pickSlot(s)">{{ s | date:'short' }}</button></li>
+      </ul>
     </div>
 
     <div class="field">
@@ -53,6 +68,7 @@
       <p>{{ scheduleResponse.serviceName }} em {{ scheduleResponse.scheduledAt | date:'short' }}</p>
       <p>Valor total: R$ {{ scheduleResponse.totalPrice.toFixed(2) }}</p>
       <p>Receita do barbeiro: R$ {{ scheduleResponse.barberShare.toFixed(2) }}</p>
+      <p *ngIf="scheduleResponse.barberName">Barbeiro: {{ scheduleResponse.barberName }}</p>
     </section>
   </div>
 </section>

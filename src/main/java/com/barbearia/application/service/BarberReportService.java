@@ -49,7 +49,7 @@ public class BarberReportService {
     }
 
     private AppointmentResponse toResponse(Appointment appointment) {
-        return new AppointmentResponse(
+        AppointmentResponse resp = new AppointmentResponse(
                 appointment.getId(),
                 appointment.getCustomer().getId(),
                 appointment.getServiceOffer().getName(),
@@ -58,5 +58,10 @@ public class BarberReportService {
                 appointment.getOwnerRevenue(),
                 appointment.getBarberRevenue(),
                 appointment.getStatus().name());
+        if (appointment.getBarber() != null) {
+            resp.setBarberId(appointment.getBarber().getId());
+            resp.setBarberName(appointment.getBarber().getUsername());
+        }
+        return resp;
     }
 }

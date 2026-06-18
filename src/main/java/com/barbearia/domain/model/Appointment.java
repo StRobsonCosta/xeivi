@@ -1,5 +1,6 @@
 package com.barbearia.domain.model;
 
+import com.barbearia.model.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,9 @@ public class Appointment {
     @ManyToOne(optional = false)
     private ServiceOffer serviceOffer;
 
+    @ManyToOne
+    private User barber;
+
     private LocalDateTime scheduledAt;
     private boolean paid;
     private double ownerSharePercentage;
@@ -37,12 +41,17 @@ public class Appointment {
     @Enumerated(EnumType.STRING)
     private Status status = Status.SCHEDULED;
 
-    public Appointment(Customer customer, ServiceOffer serviceOffer, LocalDateTime scheduledAt, double ownerSharePercentage) {
+    public Appointment(Customer customer, ServiceOffer serviceOffer, User barber, LocalDateTime scheduledAt, double ownerSharePercentage) {
         this.customer = Objects.requireNonNull(customer, "customer is required");
         this.serviceOffer = Objects.requireNonNull(serviceOffer, "serviceOffer is required");
+        this.barber = barber;
         this.scheduledAt = Objects.requireNonNull(scheduledAt, "scheduledAt is required");
         this.ownerSharePercentage = ownerSharePercentage;
         this.status = Status.SCHEDULED;
+    }
+
+    public Appointment(Customer customer, ServiceOffer serviceOffer, LocalDateTime scheduledAt, double ownerSharePercentage) {
+        this(customer, serviceOffer, null, scheduledAt, ownerSharePercentage);
     }
 
     public void markPaid() {
