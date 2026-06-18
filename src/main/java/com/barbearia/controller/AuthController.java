@@ -42,11 +42,19 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest req) {
+        System.out.println("Login attempt for username='" + req.getUsername() + "'");
         Optional<User> uopt = userService.findByUsername(req.getUsername());
-        if (uopt.isEmpty()) return ResponseEntity.status(401).build();
+        if (uopt.isEmpty()) {
+            System.out.println("Login failed: user not found: '" + req.getUsername() + "'");
+            return ResponseEntity.status(401).build();
+        }
         User u = uopt.get();
-        if (!userService.checkPassword(u, req.getPassword())) return ResponseEntity.status(401).build();
+        if (!userService.checkPassword(u, req.getPassword())) {
+            System.out.println("Login failed: invalid password for user: '" + req.getUsername() + "'");
+            return ResponseEntity.status(401).build();
+        }
         String token = jwtUtil.generateToken(u.getUsername(), u.getRole());
+        System.out.println("Login successful for user='" + req.getUsername() + "', role='" + u.getRole() + "'");
         return ResponseEntity.ok(new AuthResponse(token, u.getRole()));
     }
 
