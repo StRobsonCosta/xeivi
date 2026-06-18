@@ -75,8 +75,12 @@ public class ClientAppointmentService {
                 throw new IllegalArgumentException("Usuário selecionado não é barbeiro");
             }
 
-            // check availability
-            var start = request.getScheduledAt().toLocalDate().atStartOfDay();
+            // check availability: ensure no appointment exists exactly at that time for this barber
+            var scheduledAt = request.getScheduledAt();
+            var conflict = appointmentRepository.findByBarberIdAndScheduledAt(barber.getId(), scheduledAt);
+            if (conflict.isPresent()) {
+                throw new IllegalArgumentException("Horário não disponível para o barbeiro selecionado");
+            }
         }
 
         Appointment appointment = new Appointment(customer, serviceOffer, barber, request.getScheduledAt(), request.getOwnerSharePercentage());
