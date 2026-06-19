@@ -122,14 +122,21 @@ public class ClientAppointmentService {
         java.time.LocalDateTime start = date.atTime(8,0);
         java.time.LocalDateTime end = date.atTime(19,0);
         var appointments = appointmentRepository.findByBarberIdAndScheduledAtBetweenOrderByScheduledAtAsc(barberId, start, end);
-        java.util.Set<java.time.LocalDateTime> occupied = new java.util.HashSet<>();
-        for (var a: appointments) {
-            occupied.add(a.getScheduledAt());
-        }
         java.util.List<java.time.LocalDateTime> slots = new java.util.ArrayList<>();
         java.time.LocalDateTime cur = start;
         while (!cur.isAfter(end.minusMinutes(30))) {
-            if (!occupied.contains(cur)) slots.add(cur);
+            boolean overlaps = false;
+            var slotStart = cur;
+            var slotEnd = cur.plusMinutes(30);
+            for (var a: appointments) {
+                var aStart = a.getScheduledAt();
+                var aEnd = aStart.plusMinutes(30);
+                if (aStart.isBefore(slotEnd) && slotStart.isBefore(aEnd)) {
+                    overlaps = true;
+                    break;
+                }
+            }
+            if (!overlaps) slots.add(cur);
             cur = cur.plusMinutes(30);
         }
         return slots;
