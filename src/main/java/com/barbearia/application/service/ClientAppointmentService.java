@@ -75,10 +75,18 @@ public class ClientAppointmentService {
                 throw new IllegalArgumentException("Usuário selecionado não é barbeiro");
             }
 
-            // check availability: ensure no appointment exists exactly at that time for this barber
+            // scheduledAt must be aligned to 30-minute slots (e.g., 08:00, 08:30)
             var scheduledAt = request.getScheduledAt();
-            var conflict = appointmentRepository.findByBarberIdAndScheduledAt(barber.getId(), scheduledAt);
-            if (conflict.isPresent()) {
+            if (scheduledAt.getMinute() % 30 != 0 || scheduledAt.getSecond() != 0 || scheduledAt.getNano() != 0) {
+                throw new IllegalArgumentException("Horário deve estar alinhado a intervalos de 30 minutos (ex: 13:00, 13:30)");
+            }
+
+            // check availability by verifying there is no overlapping appointment for the barber
+            // an overlap exists when: existingStart < requestedEnd && requestedStart < existingEnd
+            var windowStart = scheduledAt.minusMinutes(29);
+            var windowEnd = scheduledAt.plusMinutes(29);
+            var nearby = appointmentRepository.findByBarberIdAndScheduledAtBetween(barber.getId(), windowStart, windowEnd);
+            if (!nearby.isEmpty()) {
                 throw new IllegalArgumentException("Horário não disponível para o barbeiro selecionado");
             }
         }
