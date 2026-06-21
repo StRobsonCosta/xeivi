@@ -51,7 +51,7 @@ public class ClientController {
     }
 
     @GetMapping("/availability")
-    public List<LocalDateTime> availability(@RequestParam Long barberId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public List<LocalDateTime> availability(@RequestParam(name = "barberId") Long barberId, @RequestParam(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         // delegate to service
         return clientAppointmentService.getAvailability(barberId, date);
     }
