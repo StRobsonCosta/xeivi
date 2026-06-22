@@ -12,6 +12,8 @@ public class AppointmentResponse {
     private double ownerShare;
     private double barberShare;
     private String status;
+    private Long barberId;
+    private String barberName;
 
     public AppointmentResponse(Long appointmentId, Long customerId, String serviceName, LocalDateTime scheduledAt,
                                double totalPrice, double ownerShare, double barberShare, String status) {
@@ -54,4 +56,9 @@ public class AppointmentResponse {
     }
 
     public String getStatus() { return status; }
+
+    public Long getBarberId() { return barberId; }
+    public void setBarberId(Long barberId) { this.barberId = barberId; }
+    public String getBarberName() { return barberName; }
+    public void setBarberName(String barberName) { this.barberName = barberName; }
 }

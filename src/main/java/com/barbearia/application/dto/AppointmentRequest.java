@@ -6,6 +6,7 @@ public class AppointmentRequest {
 
     private Long customerId;
     private Long serviceOfferId;
+    private Long barberId;
     private LocalDateTime scheduledAt;
     private double ownerSharePercentage;
 
@@ -24,6 +25,9 @@ public class AppointmentRequest {
     public void setServiceOfferId(Long serviceOfferId) {
         this.serviceOfferId = serviceOfferId;
     }
+
+    public Long getBarberId() { return barberId; }
+    public void setBarberId(Long barberId) { this.barberId = barberId; }
 
     public LocalDateTime getScheduledAt() {
         return scheduledAt;

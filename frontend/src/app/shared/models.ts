@@ -12,9 +12,16 @@ export interface Product {
   price: number;
 }
 
+export interface Barber {
+  id: number;
+  username: string;
+  email?: string;
+}
+
 export interface AppointmentRequest {
   customerId: number;
   serviceOfferId: number;
+  barberId?: number;
   scheduledAt: string;
   ownerSharePercentage: number;
 }
@@ -27,6 +34,8 @@ export interface AppointmentResponse {
   totalPrice: number;
   ownerShare: number;
   barberShare: number;
+  barberId?: number;
+  barberName?: string;
 }
 
 export interface DailyMovement {
