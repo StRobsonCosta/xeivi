@@ -31,8 +31,8 @@ public class OwnerController {
     }
 
     @GetMapping("/dashboard")
-    public ResponseEntity<OwnerDashboardDto> dashboard(@RequestParam(required = false) LocalDate from,
-                                                       @RequestParam(required = false) LocalDate to) {
+    public ResponseEntity<OwnerDashboardDto> dashboard(@RequestParam(name = "from", required = false) LocalDate from,
+                                                       @RequestParam(name = "to", required = false) LocalDate to) {
         LocalDate startDate = from == null ? LocalDate.now().minusDays(7) : from;
         LocalDate endDate = to == null ? LocalDate.now() : to;
         return ResponseEntity.ok(ownerDashboardService.getOwnerDashboard(startDate, endDate));
