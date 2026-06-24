@@ -25,14 +25,14 @@ public class BarberController {
     }
 
     @GetMapping("/schedule")
-    public ResponseEntity<List<AppointmentResponse>> schedule(@RequestParam(required = false) LocalDate date) {
+    public ResponseEntity<List<AppointmentResponse>> schedule(@RequestParam(name = "date", required = false) LocalDate date) {
         LocalDate queryDate = date == null ? LocalDate.now() : date;
         return ResponseEntity.ok(barberReportService.getScheduleForDay(queryDate));
     }
 
     @GetMapping("/earnings")
-    public ResponseEntity<Map<String, Object>> earnings(@RequestParam(required = false) LocalDate date,
-                                                        @RequestParam(required = false) LocalDate until) {
+    public ResponseEntity<Map<String, Object>> earnings(@RequestParam(name = "date", required = false) LocalDate date,
+                                                        @RequestParam(name = "until", required = false) LocalDate until) {
         LocalDate queryDate = date == null ? LocalDate.now() : date;
         LocalDate endDate = until == null ? queryDate : until;
         double dailyEarnings = barberReportService.getDailyEarnings(queryDate);
