@@ -44,25 +44,37 @@ public class StartupDataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        Customer alice = new Customer("Alice Silva", "alice@example.com", "+55 11 99999-0001");
-        Customer bruno = new Customer("Bruno Costa", "bruno@example.com", "+55 11 99999-0002");
-        customerRepository.save(alice);
-        customerRepository.save(bruno);
+        // Idempotent startup data loader: only insert if not present
+        Customer alice = customerRepository.findByEmail("alice@example.com")
+            .orElseGet(() -> customerRepository.save(new Customer("Alice Silva", "alice@example.com", "+55 11 99999-0001")));
 
-        ServiceOffer corte = new ServiceOffer("Corte Clássico", "Corte masculino completo", 45.0);
-        ServiceOffer barba = new ServiceOffer("Barba Premium", "Acabamento e tratamento da barba", 35.0);
-        serviceOfferRepository.save(corte);
-        serviceOfferRepository.save(barba);
+        Customer bruno = customerRepository.findByEmail("bruno@example.com")
+            .orElseGet(() -> customerRepository.save(new Customer("Bruno Costa", "bruno@example.com", "+55 11 99999-0002")));
 
-        productRepository.save(new Product("Pomada Modeladora", "Fixação média", 28.0));
-        productRepository.save(new Product("Óleo de Barba", "Hidratação e brilho", 52.0));
+        ServiceOffer corte = serviceOfferRepository.findByName("Corte Clássico")
+            .orElseGet(() -> serviceOfferRepository.save(new ServiceOffer("Corte Clássico", "Corte masculino completo", 45.0)));
 
-        appointmentRepository.save(new Appointment(alice, corte, LocalDateTime.now().plusDays(1).withHour(10).withMinute(30), 25.0));
-        appointmentRepository.save(new Appointment(bruno, barba, LocalDateTime.now().plusDays(1).withHour(12).withMinute(15), 25.0));
+        ServiceOffer barba = serviceOfferRepository.findByName("Barba Premium")
+            .orElseGet(() -> serviceOfferRepository.save(new ServiceOffer("Barba Premium", "Acabamento e tratamento da barba", 35.0)));
 
-        materialCostRepository.save(new MaterialCost("Lâminas descartáveis", 60.0, LocalDate.now().minusDays(2)));
-        materialCostRepository.save(new MaterialCost("Água e produtos", 120.0, LocalDate.now().minusDays(1)));
+        productRepository.findByName("Pomada Modeladora")
+            .orElseGet(() -> productRepository.save(new Product("Pomada Modeladora", "Fixação média", 28.0)));
 
-        logger.info("Dados iniciais da barbearia carregados com sucesso.");
+        productRepository.findByName("Óleo de Barba")
+            .orElseGet(() -> productRepository.save(new Product("Óleo de Barba", "Hidratação e brilho", 52.0)));
+
+        // Only add sample appointments if none exist to avoid duplicates on restart
+        if (appointmentRepository.count() == 0) {
+            appointmentRepository.save(new Appointment(alice, corte, LocalDateTime.now().plusDays(1).withHour(10).withMinute(30), 25.0));
+            appointmentRepository.save(new Appointment(bruno, barba, LocalDateTime.now().plusDays(1).withHour(12).withMinute(15), 25.0));
+        }
+
+        // Material costs: add only if none exist with same description and date
+        if (materialCostRepository.count() == 0) {
+            materialCostRepository.save(new MaterialCost("Lâminas descartáveis", 60.0, LocalDate.now().minusDays(2)));
+            materialCostRepository.save(new MaterialCost("Água e produtos", 120.0, LocalDate.now().minusDays(1)));
+        }
+
+        logger.info("Dados iniciais da barbearia carregados (idempotente).");
     }
 }
