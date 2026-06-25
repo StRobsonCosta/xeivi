@@ -45,23 +45,23 @@ public class StartupDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         // Idempotent startup data loader: only insert if not present
-        Customer alice = customerRepository.findByEmail("alice@example.com")
-            .orElseGet(() -> customerRepository.save(new Customer("Alice Silva", "alice@example.com", "+55 11 99999-0001")));
+        Customer alice = customerRepository.findFirstByEmail("alice@example.com")
+                .orElseGet(() -> customerRepository.save(new Customer("Alice Silva", "alice@example.com", "+55 11 99999-0001")));
 
-        Customer bruno = customerRepository.findByEmail("bruno@example.com")
-            .orElseGet(() -> customerRepository.save(new Customer("Bruno Costa", "bruno@example.com", "+55 11 99999-0002")));
+        Customer bruno = customerRepository.findFirstByEmail("bruno@example.com")
+                .orElseGet(() -> customerRepository.save(new Customer("Bruno Costa", "bruno@example.com", "+55 11 99999-0002")));
 
-        ServiceOffer corte = serviceOfferRepository.findByName("Corte Clássico")
-            .orElseGet(() -> serviceOfferRepository.save(new ServiceOffer("Corte Clássico", "Corte masculino completo", 45.0)));
+        ServiceOffer corte = serviceOfferRepository.findFirstByName("Corte Clássico")
+                .orElseGet(() -> serviceOfferRepository.save(new ServiceOffer("Corte Clássico", "Corte masculino completo", 45.0)));
 
-        ServiceOffer barba = serviceOfferRepository.findByName("Barba Premium")
-            .orElseGet(() -> serviceOfferRepository.save(new ServiceOffer("Barba Premium", "Acabamento e tratamento da barba", 35.0)));
+        ServiceOffer barba = serviceOfferRepository.findFirstByName("Barba Premium")
+                .orElseGet(() -> serviceOfferRepository.save(new ServiceOffer("Barba Premium", "Acabamento e tratamento da barba", 35.0)));
 
-        productRepository.findByName("Pomada Modeladora")
-            .orElseGet(() -> productRepository.save(new Product("Pomada Modeladora", "Fixação média", 28.0)));
+        productRepository.findFirstByName("Pomada Modeladora")
+                .orElseGet(() -> productRepository.save(new Product("Pomada Modeladora", "Fixação média", 28.0)));
 
-        productRepository.findByName("Óleo de Barba")
-            .orElseGet(() -> productRepository.save(new Product("Óleo de Barba", "Hidratação e brilho", 52.0)));
+        productRepository.findFirstByName("Óleo de Barba")
+                .orElseGet(() -> productRepository.save(new Product("Óleo de Barba", "Hidratação e lubrificação", 35.0)));
 
         // Only add sample appointments if none exist to avoid duplicates on restart
         if (appointmentRepository.count() == 0) {
