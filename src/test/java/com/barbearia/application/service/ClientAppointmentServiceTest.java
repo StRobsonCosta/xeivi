@@ -4,6 +4,7 @@ import com.barbearia.application.dto.AppointmentRequest;
 import com.barbearia.domain.model.Customer;
 import com.barbearia.domain.model.ServiceOffer;
 import com.barbearia.domain.repository.AppointmentRepository;
+import com.barbearia.repo.UserRepository;
 import com.barbearia.domain.repository.CustomerRepository;
 import com.barbearia.domain.repository.ProductRepository;
 import com.barbearia.domain.repository.ServiceOfferRepository;
@@ -27,6 +28,7 @@ class ClientAppointmentServiceTest {
     private ServiceOfferRepository serviceOfferRepository;
     private ProductRepository productRepository;
     private AppointmentRepository appointmentRepository;
+    private UserRepository userRepository;
     private ClientAppointmentService service;
 
     @BeforeEach
@@ -35,8 +37,9 @@ class ClientAppointmentServiceTest {
         serviceOfferRepository = Mockito.mock(ServiceOfferRepository.class);
         productRepository = Mockito.mock(ProductRepository.class);
         appointmentRepository = Mockito.mock(AppointmentRepository.class);
+        userRepository = Mockito.mock(UserRepository.class);
         service = new ClientAppointmentService(customerRepository, serviceOfferRepository, productRepository,
-                appointmentRepository, new SimpleMeterRegistry());
+                appointmentRepository, userRepository, new SimpleMeterRegistry());
     }
 
     @Test
