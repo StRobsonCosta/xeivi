@@ -32,9 +32,9 @@ export class AuthService {
     }
   }
 
-  async login(username: string, password: string, _role?: Role): Promise<boolean> {
+  async login(username: string, password: string, role?: Role): Promise<boolean> {
     try {
-      const res = await this.http.post<LoginResponse>(`${environment.apiBaseUrl}/api/auth/login`, { username, password }).toPromise();
+      const res = await this.http.post<LoginResponse>(`${environment.apiBaseUrl}/api/auth/login`, { username, password, role }).toPromise();
       if (!res || !res.token || !res.role) return false;
       // Trust server-provided role only (prevent client spoofing)
       localStorage.setItem('auth.token', res.token);
