@@ -11,6 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.time.Instant;
+import java.util.Locale;
 import java.util.Optional;
 
 @RestController
@@ -59,6 +60,17 @@ public class AuthController {
             System.out.println("Login failed: invalid password for user: '" + req.getUsername() + "'");
             return ResponseEntity.status(401).build();
         }
+
+        String requestedRole = req.getRole();
+        if (requestedRole != null && !requestedRole.isBlank()) {
+            String normalizedRequestedRole = requestedRole.trim().toUpperCase(Locale.ROOT);
+            String normalizedUserRole = u.getRole() == null ? null : u.getRole().trim().toUpperCase(Locale.ROOT);
+            if (normalizedUserRole == null || !normalizedRequestedRole.equals(normalizedUserRole)) {
+                System.out.println("Login failed: role mismatch for user='" + req.getUsername() + "', requestedRole='" + requestedRole + "', userRole='" + u.getRole() + "'");
+                return ResponseEntity.status(401).build();
+            }
+        }
+
         String token = jwtUtil.generateToken(u.getUsername(), u.getRole());
         System.out.println("Login successful for user='" + req.getUsername() + "', role='" + u.getRole() + "', customerId='" + u.getCustomerId() + "'");
         return ResponseEntity.ok(new AuthResponse(token, u.getRole(), u.getUsername(), u.getCustomerId()));
