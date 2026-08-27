@@ -104,8 +104,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("expired_token");
         }
         userService.updatePassword(u, req.getNewPassword());
-        u.setResetToken(null);
-        u.setResetExpiresAt(null);
+        userService.clearResetToken(u);
         return ResponseEntity.ok().build();
     }
 }
