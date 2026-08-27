@@ -61,6 +61,12 @@ public class UserService {
         repo.save(user);
     }
 
+    public void clearResetToken(User user) {
+        user.setResetToken(null);
+        user.setResetExpiresAt(null);
+        repo.save(user);
+    }
+
     public String createResetToken(User user) {
         String token = UUID.randomUUID().toString();
         user.setResetToken(token);

@@ -32,6 +32,12 @@ mvn spring-boot:run
 - `GET /api/barbers/earnings`
 - `GET /api/owners/dashboard`
 
+## Gestão e acompanhamento
+
+- Espaço do ClickUp: `Xeivi-barbearia`
+- Board recomendado: `Backlog e Acompanhamento`
+- Link do espaço: https://app.clickup.com/9013579489/v/l/t/9013579489
+
 ## Segurança
 
 Usuários definidos no código apenas para exemplo. Em produção, troque por um provedor de identidade.
