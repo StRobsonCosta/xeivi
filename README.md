@@ -17,6 +17,7 @@ Projeto Java Spring Boot para gestão de barbearia com arquitetura DDD, seguran�
 - Logs estruturados usando SLF4J.
 - Testes unitários e de serviço.
 
+---
 ## Como executar
 
 ```bash
