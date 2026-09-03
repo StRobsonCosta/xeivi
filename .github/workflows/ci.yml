@@ -16,6 +16,8 @@ jobs:
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      - name: Spotless check
+        run: mvn com.diffplug.spotless:spotless-maven-plugin:check
       - name: Build backend (Maven)
         run: mvn -B -DskipTests=false verify
       - name: Setup Node.js
@@ -32,8 +34,9 @@ jobs:
           if [ -d "frontend" ]; then
             cd frontend
             npm ci
+            npm run format:check || npm run format
             npm run build
-            npm test || true
+            npm test
           else
             echo "No frontend folder; skipping"
           fi
