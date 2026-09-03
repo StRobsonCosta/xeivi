@@ -7,7 +7,9 @@
     "start": "ng serve --host 0.0.0.0 --port 4200",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "format": "prettier --write \"src/**/*.{ts,html,scss,css,md,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,md,json}\""
   },
   "dependencies": {
     "@angular/animations": "~17.1.0",
@@ -31,6 +33,7 @@
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-jasmine": "~5.1.0",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "prettier": "^3.0.0"
   }
 }

@@ -23,7 +23,7 @@
       <ul>
         <li *ngFor="let appointment of schedule">
           <strong>{{ appointment.serviceName }}</strong>
-          <span>{{ appointment.scheduledAt | date:'short' }}</span>
+          <span>{{ appointment.scheduledAt | date: 'short' }}</span>
           <span>R$ {{ appointment.barberShare.toFixed(2) }}</span>
         </li>
       </ul>
