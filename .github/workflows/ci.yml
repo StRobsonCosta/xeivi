@@ -36,7 +36,7 @@ jobs:
             npm ci
             npm run format:check || npm run format
             npm run build
-            npm test
+            npm test -- --watch=false --browsers=ChromeHeadless
           else
             echo "No frontend folder; skipping"
           fi
