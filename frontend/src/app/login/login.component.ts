@@ -5,7 +5,7 @@ import { AuthService, Role } from '../core/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   username = '';
@@ -13,7 +13,10 @@ export class LoginComponent {
   role: Role = 'CLIENTE';
   error = '';
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
   async login(): Promise<void> {
     if (!this.username || !this.password) {
