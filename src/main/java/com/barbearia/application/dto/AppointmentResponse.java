@@ -4,61 +4,81 @@ import java.time.LocalDateTime;
 
 public class AppointmentResponse {
 
-    private Long appointmentId;
-    private Long customerId;
-    private String serviceName;
-    private LocalDateTime scheduledAt;
-    private double totalPrice;
-    private double ownerShare;
-    private double barberShare;
-    private String status;
-    private Long barberId;
-    private String barberName;
+  private Long appointmentId;
+  private Long customerId;
+  private String serviceName;
+  private LocalDateTime scheduledAt;
+  private double totalPrice;
+  private double ownerShare;
+  private double barberShare;
+  private String status;
+  private Long barberId;
+  private String barberName;
 
-    public AppointmentResponse(Long appointmentId, Long customerId, String serviceName, LocalDateTime scheduledAt,
-                               double totalPrice, double ownerShare, double barberShare, String status) {
-        this.appointmentId = appointmentId;
-        this.customerId = customerId;
-        this.serviceName = serviceName;
-        this.scheduledAt = scheduledAt;
-        this.totalPrice = totalPrice;
-        this.ownerShare = ownerShare;
-        this.barberShare = barberShare;
-        this.status = status;
-    }
+  public AppointmentResponse(
+      Long appointmentId,
+      Long customerId,
+      String serviceName,
+      LocalDateTime scheduledAt,
+      double totalPrice,
+      double ownerShare,
+      double barberShare,
+      String status) {
+    this.appointmentId = appointmentId;
+    this.customerId = customerId;
+    this.serviceName = serviceName;
+    this.scheduledAt = scheduledAt;
+    this.totalPrice = totalPrice;
+    this.ownerShare = ownerShare;
+    this.barberShare = barberShare;
+    this.status = status;
+  }
 
-    public Long getAppointmentId() {
-        return appointmentId;
-    }
+  public Long getAppointmentId() {
+    return appointmentId;
+  }
 
-    public Long getCustomerId() {
-        return customerId;
-    }
+  public Long getCustomerId() {
+    return customerId;
+  }
 
-    public String getServiceName() {
-        return serviceName;
-    }
+  public String getServiceName() {
+    return serviceName;
+  }
 
-    public LocalDateTime getScheduledAt() {
-        return scheduledAt;
-    }
+  public LocalDateTime getScheduledAt() {
+    return scheduledAt;
+  }
 
-    public double getTotalPrice() {
-        return totalPrice;
-    }
+  public double getTotalPrice() {
+    return totalPrice;
+  }
 
-    public double getOwnerShare() {
-        return ownerShare;
-    }
+  public double getOwnerShare() {
+    return ownerShare;
+  }
 
-    public double getBarberShare() {
-        return barberShare;
-    }
+  public double getBarberShare() {
+    return barberShare;
+  }
 
-    public String getStatus() { return status; }
+  public String getStatus() {
+    return status;
+  }
 
-    public Long getBarberId() { return barberId; }
-    public void setBarberId(Long barberId) { this.barberId = barberId; }
-    public String getBarberName() { return barberName; }
-    public void setBarberName(String barberName) { this.barberName = barberName; }
+  public Long getBarberId() {
+    return barberId;
+  }
+
+  public void setBarberId(Long barberId) {
+    this.barberId = barberId;
+  }
+
+  public String getBarberName() {
+    return barberName;
+  }
+
+  public void setBarberName(String barberName) {
+    this.barberName = barberName;
+  }
 }

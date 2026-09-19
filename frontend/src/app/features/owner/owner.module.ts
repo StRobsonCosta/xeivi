@@ -6,6 +6,6 @@ import { OwnerComponent } from './owner.component';
 
 @NgModule({
   declarations: [OwnerComponent],
-  imports: [CommonModule, FormsModule, OwnerRoutingModule]
+  imports: [CommonModule, FormsModule, OwnerRoutingModule],
 })
 export class OwnerModule {}
