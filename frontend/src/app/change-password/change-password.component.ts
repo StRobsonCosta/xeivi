@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-change-password',
-  templateUrl: './change-password.component.html'
+  templateUrl: './change-password.component.html',
 })
 export class ChangePasswordComponent {
   oldPassword = '';
@@ -17,9 +17,14 @@ export class ChangePasswordComponent {
   async change() {
     this.error = this.info = '';
     try {
-      await this.http.post(`${environment.apiBaseUrl}/api/users/change-password`, { oldPassword: this.oldPassword, newPassword: this.newPassword }).toPromise();
+      await this.http
+        .post(`${environment.apiBaseUrl}/api/users/change-password`, {
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword,
+        })
+        .toPromise();
       this.info = 'Senha atualizada.';
-    } catch (e:any) {
+    } catch (e: any) {
       this.error = 'Erro ao alterar senha.';
     }
   }

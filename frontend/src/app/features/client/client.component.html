@@ -31,7 +31,9 @@
       <label>Serviço</label>
       <select [(ngModel)]="request.serviceOfferId" name="serviceOfferId">
         <option value="0">Escolha um serviço</option>
-        <option *ngFor="let service of services" [value]="service.id">{{ service.name }} - R$ {{ service.price.toFixed(2) }}</option>
+        <option *ngFor="let service of services" [value]="service.id">
+          {{ service.name }} - R$ {{ service.price.toFixed(2) }}
+        </option>
       </select>
     </div>
 
@@ -45,19 +47,32 @@
 
     <div class="field">
       <label>Data e hora</label>
-      <input type="datetime-local" [(ngModel)]="request.scheduledAt" name="scheduledAt" (change)="onBarberOrDateChange()" />
+      <input
+        type="datetime-local"
+        [(ngModel)]="request.scheduledAt"
+        name="scheduledAt"
+        (change)="onBarberOrDateChange()"
+      />
     </div>
 
-    <div class="field" *ngIf="availableSlots && availableSlots.length>0">
+    <div class="field" *ngIf="availableSlots && availableSlots.length > 0">
       <label>Horários disponíveis</label>
       <ul>
-        <li *ngFor="let s of availableSlots"><button (click)="pickSlot(s)">{{ s | date:'short' }}</button></li>
+        <li *ngFor="let s of availableSlots">
+          <button (click)="pickSlot(s)">{{ s | date: 'short' }}</button>
+        </li>
       </ul>
     </div>
 
     <div class="field">
       <label>Comissão do dono (%)</label>
-      <input type="number" [(ngModel)]="request.ownerSharePercentage" name="ownerSharePercentage" min="0" max="100" />
+      <input
+        type="number"
+        [(ngModel)]="request.ownerSharePercentage"
+        name="ownerSharePercentage"
+        min="0"
+        max="100"
+      />
     </div>
 
     <button (click)="submit()">Agendar</button>
@@ -65,7 +80,9 @@
     <p class="error" *ngIf="error">{{ error }}</p>
     <section *ngIf="scheduleResponse" class="success">
       <h4>Agendamento confirmado!</h4>
-      <p>{{ scheduleResponse.serviceName }} em {{ scheduleResponse.scheduledAt | date:'short' }}</p>
+      <p>
+        {{ scheduleResponse.serviceName }} em {{ scheduleResponse.scheduledAt | date: 'short' }}
+      </p>
       <p>Valor total: R$ {{ scheduleResponse.totalPrice.toFixed(2) }}</p>
       <p>Receita do barbeiro: R$ {{ scheduleResponse.barberShare.toFixed(2) }}</p>
       <p *ngIf="scheduleResponse.barberName">Barbeiro: {{ scheduleResponse.barberName }}</p>

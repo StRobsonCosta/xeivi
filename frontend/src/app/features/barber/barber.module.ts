@@ -6,6 +6,6 @@ import { BarberComponent } from './barber.component';
 
 @NgModule({
   declarations: [BarberComponent],
-  imports: [CommonModule, FormsModule, BarberRoutingModule]
+  imports: [CommonModule, FormsModule, BarberRoutingModule],
 })
 export class BarberModule {}

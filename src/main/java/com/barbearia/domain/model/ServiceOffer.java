@@ -5,13 +5,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Objects;
 
 @Entity
 @Table(name = "service_offers")
@@ -21,16 +20,17 @@ import java.util.Objects;
 @AllArgsConstructor
 public class ServiceOffer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String description;
-    private double price;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    public ServiceOffer(String name, String description, double price) {
-        this.name = Objects.requireNonNull(name, "name is required");
-        this.description = Objects.requireNonNull(description, "description is required");
-        this.price = price;
-    }
+  private String name;
+  private String description;
+  private double price;
+
+  public ServiceOffer(String name, String description, double price) {
+    this.name = Objects.requireNonNull(name, "name is required");
+    this.description = Objects.requireNonNull(description, "description is required");
+    this.price = price;
+  }
 }
